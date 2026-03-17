@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator's Arena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand { font-family: 'Space Grotesk', sans-serif; }
+        
+        body { 
+            background: #050508; 
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .bg-grid {
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .glass-panel {
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.15);
+        }
+        
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(102, 126, 234, 0.25);
+        }
+        
+        .live-pulse {
+            animation: livePulse 2s infinite;
+        }
+        
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+        
+        .tab-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .crafting-slot {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .crafting-slot.filled {
+            border-style: solid;
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .chat-message {
+            animation: messageSlide 0.3s ease-out;
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .notification-toast {
+            animation: achievementSlide 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes achievementSlide {
+            0% { transform: translateX(100%) scale(0.5); opacity: 0; }
+            50% { transform: translateX(-10%) scale(1.05); }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        .boss-health {
+            background: linear-gradient(90deg, #ef4444 0%, #f97316 50%, #eab308 100%);
+            transition: width 0.5s ease;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(102, 126, 234, 0.5); border-radius: 4px; }
+        
+        @media (max-width: 768px) {
+            .glass-panel { border-radius: 16px; }
+            .hover-lift:hover { transform: none; }
+        }
+    </style>
+</head>
+<body class="bg-grid min-h-screen">
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/10 px-4 py-3">
+        <div class="max-w-[1600px] mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 via-pink-500 to-blue-500 flex items-center justify-center animate-pulse">
+                    <i class="fas fa-infinity text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold gradient-text brand">Creator's Arena</span>
+                    <div class="text-[10px] text-gray-400 -mt-1">ULTIMATE EDITION</div>
+                </div>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-8">
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="fas fa-fire text-orange-500 animate-pulse"></i>
+                    <div>
+                        <div class="font-bold text-orange-400">15 Day Streak!</div>
+                        <div class="text-xs text-gray-500">Personal Best</div>
+                    </div>
+                </div>
+                
+                <div class="h-8 w-px bg-white/10"></div>
+                
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="fas fa-gem text-purple-400"></i>
+                    <div>
+                        <div class="font-bold text-purple-300">2,450 Gems</div>
+                        <div class="text-xs text-gray-500">Premium Currency</div>
+                    </div>
+                </div>
+                
+                <div class="h-8 w-px bg-white/10"></div>
+                
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="fas fa-coins text-yellow-400"></i>
+                    <div>
+                        <div class="font-bold text-yellow-300">45,200</div>
+                        <div class="text-xs text-gray-500">Creator Coins</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button class="relative p-2 rounded-xl bg-white/5 hover:bg-white/10 transition">
+                    <i class="fas fa-bell text-gray-300"></i>
+                    <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center animate-bounce">9</span>
+                </button>
+                
+                <button class="relative p-2 rounded-xl bg-white/5 hover:bg-white/10 transition">
+                    <i class="fas fa-envelope text-gray-300"></i>
+                    <span class="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 rounded-full text-xs flex items-center justify-center">3</span>
+                </button>
+                
+                <div class="flex items-center gap-3 pl-3 border-l border-white/10">
+                    <div class="text-right hidden sm:block">
+                        <div class="text-sm font-bold">NeonArchitect</div>
+                        <div class="text-xs text-purple-400">Level 42 • Grandmaster</div>
+                    </div>
+                    <div class="relative">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center font-bold border-2 border-white/20 cursor-pointer hover:scale-110 transition">
+                            NA
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="fixed top-[72px] w-full z-40 glass-panel border-b border-white/10 px-4 py-2 overflow-x-auto">
+        <div class="max-w-[1600px] mx-auto flex gap-1 min-w-max">
+            <button onclick="switchTab('create')" id="tab-create" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all tab-active flex items-center gap-2">
+                <i class="fas fa-paint-brush"></i> Create
+            </button>
+            <button onclick="switchTab('arena')" id="tab-arena" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white/5 text-gray-400 hover:text-white flex items-center gap-2">
+                <i class="fas fa-trophy"></i> Arena
+                <span class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-xs rounded">LIVE</span>
+            </button>
+            <button onclick="switchTab('campaign')" id="tab-campaign" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white/5 text-gray-400 hover:text-white flex items-center gap-2">
+                <i class="fas fa-dungeon"></i> Campaign
+            </button>
+            <button onclick="switchTab('guilds')" id="tab-guilds" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white/5 text-gray-400 hover:text-white flex items-center gap-2">
+                <i class="fas fa-flag"></i> Guilds
+            </button>
+            <button onclick="switchTab('market')" id="tab-market" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white/5 text-gray-400 hover:text-white flex items-center gap-2">
+                <i class="fas fa-store"></i> Market
+            </button>
+            <button onclick="switchTab('progress')" id="tab-progress" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white/5 text-gray-400 hover:text-white flex items-center gap-2">
+                <i class="fas fa-chart-line"></i> Progress
+            </button>
+            <button onclick="switchTab('social')" id="tab-social" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-white/5 text-gray-400 hover:text-white flex items-center gap-2">
+                <i class="fas fa-users"></i> Social
+            </button>
+        </div>
+    </div>
+
+    <main class="pt-36 pb-20 px-4 max-w-[1600px] mx-auto relative z-10">
+        <div id="view-create" class="tab-view">
+            <div class="grid lg:grid-cols-4 gap-6">
+                <div class="space-y-4">
+                    <div class="glass-panel rounded-2xl p-4">
+                        <h3 class="font-bold mb-3 text-sm text-gray-400 uppercase tracking-wider">Tools</h3>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button class="aspect-square rounded-xl bg-white/5 hover:bg-purple-500/20 border border-transparent hover:border-purple-500/50 transition flex flex-col items-center justify-center gap-1 group">
+                                <i class="fas fa-mouse-pointer text-lg group-hover:text-purple-400"></i>
+                                <span class="text-[10px]">Select</span>
+                            </button>
+                            <button class="aspect-square rounded-xl bg-white/5 hover:bg-purple-500/20 border border-transparent hover:border-purple-500/50 transition flex flex-col items-center justify-center gap-1 group">
+                                <i class="fas fa-pen text-lg group-hover:text-purple-400"></i>
+                                <span class="text-[10px]">Draw</span>
+                            </button>
+                            <button class="aspect-square rounded-xl bg-white/5 hover:bg-purple-500/20 border border-transparent hover:border-purple-500/50 transition flex flex-col items-center justify-center gap-1 group">
+                                <i class="fas fa-shapes text-lg group-hover:text-purple-400"></i>
+                                <span class="text-[10px]">Shapes</span>
+                            </button>
+                            <button class="aspect-square rounded-xl bg-white/5 hover:bg-purple-500/20 border border-transparent hover:border-purple-500/50 transition flex flex-col items-center justify-center gap-1 group">
+                                <i class="fas fa-font text-lg group-hover:text-purple-400"></i>
+                                <span class="text-[10px]">Text</span>
+                            </button>
+                            <button class="aspect-square rounded-xl bg-white/5 hover:bg-purple-500/20 border border-transparent hover:border-purple-500/50 transition flex flex-col items-center justify-center gap-1 group">
+                                <i class="fas fa-image text-lg group-hover:text-purple-400"></i>
+                                <span class="text-[10px]">Import</span>
+                            </button>
+                            <button class="aspect-square rounded-xl bg-white/5 hover:bg-purple-500/20 border border-transparent hover:border-purple-500/50 transition flex flex-col items-center justify-center gap-1 group">
+                                <i class="fas fa-magic text-lg group-hover:text-purple-400"></i>
+                                <span class="text-[10px]">AI Gen</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-4">
+                        <h3 class="font-bold mb-3 text-sm text-gray-400 uppercase tracking-wider">Live Collab</h3>
+                        <div class="flex -space-x-2 mb-3">
+                            <div class="w-8 h-8 rounded-full bg-purple-500 border-2 border-gray-900 flex items-center justify-center text-xs font-bold">PM</div>
+                            <div class="w-8 h-8 rounded-full bg-pink-500 border-2 border-gray-900 flex items-center justify-center text-xs font-bold">CA</div>
+                            <div class="w-8 h-8 rounded-full bg-blue-500 border-2 border-gray-900 flex items-center justify-center text-xs font-bold">You</div>
+                            <button class="w-8 h-8 rounded-full bg-white/10 border-2 border-dashed border-white/30 flex items-center justify-center text-xs hover:bg-white/20 transition">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-500">3 editors active • Auto-saving</div>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-4">
+                        <h3 class="font-bold mb-3 text-sm text-gray-400 uppercase tracking-wider">Crafting</h3>
+                        <div class="grid grid-cols-3 gap-2 mb-3">
+                            <div class="crafting-slot aspect-square rounded-lg flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition" onclick="toggleCraftSlot(this)">
+                                <i class="fas fa-plus text-gray-600"></i>
+                            </div>
+                            <div class="crafting-slot aspect-square rounded-lg flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition" onclick="toggleCraftSlot(this)">
+                                <i class="fas fa-plus text-gray-600"></i>
+                            </div>
+                            <div class="crafting-slot aspect-square rounded-lg flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition" onclick="toggleCraftSlot(this)">
+                                <i class="fas fa-plus text-gray-600"></i>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-arrow-down text-gray-600 mb-2"></i>
+                            <div class="w-full h-12 rounded-lg bg-white/5 border-2 border-dashed border-white/20 flex items-center justify-center text-xs text-gray-500" id="craft-result">
+                                Result
+                            </div>
+                        </div>
+                        <button class="w-full mt-3 py-2 rounded-lg bg-white/5 text-sm hover:bg-white/10 transition disabled:opacity-50" id="craft-btn" onclick="craftItem()" disabled>
+                            Combine Items
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <div class="glass-panel rounded-3xl p-1 neon-glow h-full flex flex-col">
+                        <div class="flex items-center justify-between p-4 border-b border-white/10">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold">PROJECT: Neon Genesis</span>
+                                <span class="text-xs text-gray-500">Last saved 2s ago</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm transition">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                                <button class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm transition">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <div class="w-px h-6 bg-white/10"></div>
+                                <button class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-sm font-semibold transition flex items-center gap-2" onclick="publishCreation()">
+                                    <i class="fas fa-rocket"></i> Publish
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 relative bg-black/40 rounded-b-2xl overflow-hidden min-h-[400px]" id="creation-canvas" onclick="addElement(event)">
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none" id="canvas-placeholder">
+                                <div class="text-center">
+                                    <div class="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-2 border-dashed border-purple-500/30 flex items-center justify-center mx-auto mb-4 animate-pulse">
+                                        <i class="fas fa-hand-pointer text-4xl text-purple-400"></i>
+                                    </div>
+                                    <p class="text-gray-400">Tap anywhere to create</p>
+                                    <p class="text-xs text-gray-600 mt-2">Or select a tool from the sidebar</p>
+                                </div>
+                            </div>
+                            
+                            <div class="absolute inset-0 pointer-events-none opacity-20" 
+                                 style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 40px 40px;">
+                            </div>
+                            
+                            <div id="canvas-elements"></div>
+                        </div>
+                        
+                        <div class="p-4 border-t border-white/10">
+                            <div class="flex items-center gap-4">
+                                <button class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition" onclick="togglePlay()">
+                                    <i class="fas fa-play text-xs" id="play-btn"></i>
+                                </button>
+                                <div class="flex-1 h-8 bg-white/5 rounded-lg relative overflow-hidden">
+  
