@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator's Arena</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+        }
+        .header {
+            background: rgba(20,20,30,0.9);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+        .nav button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .nav button.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        .main {
+            padding: 120px 20px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .canvas-area {
+            background: #000;
+            border-radius: 15px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .canvas-area:hover {
+            background: #111;
+        }
+        .shape {
+            position: absolute;
+            transition: transform 0.3s;
+            cursor: move;
+        }
+        .shape:hover {
+            transform: scale(1.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">Creator's Arena</div>
+        <div class="nav">
+            <button class="active" onclick="showTab('create')">Create</button>
+            <button onclick="showTab('arena')">Arena</button>
+            <button onclick="showTab('guild')">Guild</button>
+            <button onclick="showTab('market')">Market</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- Create Tab -->
+        <div id="create" class="tab">
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="xp">2,450</div>
+                    <div>XP</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="level">42</div>
+                    <div>Level</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="creations">0</div>
+                    <div>Creations</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">Design Canvas</h3>
+                <div class="canvas-area" id="canvas" onclick="addShape(event)">
+                    <p style="color: #666;">Tap anywhere to create art</p>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn-primary" onclick="clearCanvas()">Clear</button>
+                    <button class="btn-primary" onclick="publishArt()">Publish</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arena Tab -->
+        <div id="arena" class="tab hidden">
+            <div class="card">
+                <h2 style="margin-bottom: 15px;">🏆 Live Battle</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="card" style="text-align: center; cursor: pointer;" onclick="vote(1)">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🎨</div>
+                        <div>NeonDreamer</div>
+                        <div style="color: #667eea; font-size: 24px; font-weight: bold;" id="votes1">1,234</div>
+                    </div>
+                    <div class="card" style="text-align: center; cursor: pointer;" onclick="vote(2)">
+                        <div style="font-size: 48px; margin-bottom: 10px;">🌊</div>
+                        <div>BioHacker</div>
+                        <div style="color: #667eea; font-size: 24px; font-weight: bold;" id="votes2">1,567</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guild Tab -->
+        <div id="guild" class="tab hidden">
+            <div class="card">
+                <h2>🔥 Neon Dragons Guild</h2>
+                <p style="color: #888; margin: 10px 0;">47 members • Rank #3</p>
+                <div style="background: rgba(102,126,234,0.2); padding: 15px; border-radius: 10px; margin-top: 15px;">
+                    <strong>DragonLord:</strong> Great work everyone!
+                </div>
+                <input type="text" placeholder="Type message..." style="width: 100%; margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: #fff;" onkeypress="sendMessage(event)">
+            </div>
+        </div>
+
+        <!-- Market Tab -->
+        <div id="market" class="tab hidden">
+            <div class="card">
+                <h2>🛒 Creator Market</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div class="card" style="text-align: center; cursor: pointer;" onclick="buy('Neon Frame', 500)">
+                        <div style="font-size: 32px;">🖼️</div>
+                        <div>Neon Frame</div>
+                        <div style="color: #ffd700;">500 🪙</div>
+                    </div>
+                    <div class="card" style="text-align: center; cursor: pointer;" onclick="buy('Dragon Pet', 2000)">
+                        <div style="font-size: 32px;">🐉</div>
+                        <div>Dragon Pet</div>
+                        <div style="color: #ffd700;">2000 🪙</div>
+                    </div>
+                    <div class="card" style="text-align: center; cursor: pointer;" onclick="buy('Particle Pack', 300)">
+                        <div style="font-size: 32px;">✨</div>
+                        <div>Particle Pack</div>
+                        <div style="color: #ffd700;">300 🪙</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let creations = 0;
+        let xp = 2450;
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
+            document.getElementById(tabName).classList.remove('hidden');
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function addShape(e) {
+            const canvas = document.getElementById('canvas');
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            canvas.querySelector('p')?.remove();
+            
+            const shapes = ['🔷', '🔴', '🟩', '⭐', '💠'];
+            const shape = document.createElement('div');
+            shape.className = 'shape';
+            shape.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+            shape.style.left = (x - 20) + 'px';
+            shape.style.top = (y - 20) + 'px';
+            shape.style.fontSize = '40px';
+            
+            canvas.appendChild(shape);
+            creations++;
+            document.getElementById('creations').textContent = creations;
+            
+            if (creations === 1) alert('🎨 First creation! +10 XP');
+        }
+
+        function clearCanvas() {
+            document.getElementById('canvas').innerHTML = '<p style="color: #666;">Tap anywhere to create art</p>';
+            creations = 0;
+            document.getElementById('creations').textContent = 0;
+        }
+
+        function publishArt() {
+            if (creations === 0) {
+                alert('Create something first!');
+                return;
+            }
+            xp += 100;
+            document.getElementById('xp').textContent = xp.toLocaleString();
+            alert('🚀 Published! +100 XP');
+        }
+
+        function vote(player) {
+            const votesEl = document.getElementById('votes' + player);
+            let votes = parseInt(votesEl.textContent.replace(',', ''));
+            votes += Math.floor(Math.random() * 50) + 10;
+            votesEl.textContent = votes.toLocaleString();
+            alert('✅ Voted! +5 XP');
+        }
+
+        function sendMessage(e) {
+            if (e.key === 'Enter' && e.target.value.trim()) {
+                alert('💬 Message sent: ' + e.target.value);
+                e.target.value = '';
+            }
+        }
+
+        function buy(item, price) {
+            if (confirm(`Buy ${item} for ${price} coins?`)) {
+                alert(`🛒 Purchased ${item}!`);
+            }
+        }
+    </script>
+</body>
+</html>
